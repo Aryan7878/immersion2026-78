@@ -1,76 +1,112 @@
-class FoodItem {
-    int itemId;
-    String itemName;
-    double price;
-    int quantity;
+import java.util.Scanner;
 
-    FoodItem(int itemId, String itemName, double price, int quantity) {
+class FoodItem {
+    private int itemId;
+    private String itemName;
+    private double price;
+    private int quantity;
+
+    public FoodItem(int itemId, String itemName, double price, int quantity) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
     }
 
-    double calculateAmount() {
+    public double calculateAmount() {
         return price * quantity;
     }
 
-    void displayItemDetails() {
-        System.out.println("Item ID   : " + itemId);
+    public void displayItemDetails() {
+        System.out.println("\nItem ID   : " + itemId);
         System.out.println("Item Name : " + itemName);
-        System.out.println("Price     : " + price);
+        System.out.println("Price     : ₹" + price);
         System.out.println("Quantity  : " + quantity);
-        System.out.println("Amount    : " + calculateAmount());
-        System.out.println("-----------------------");
+        System.out.println("Amount    : ₹" + calculateAmount());
     }
 }
 
 class Customer {
-    int customerId;
-    String customerName;
-    String mobileNumber;
+    private int customerId;
+    private String customerName;
+    private String mobileNumber;
 
-    Customer(int customerId, String customerName, String mobileNumber) {
+    public Customer(int customerId, String customerName, String mobileNumber) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.mobileNumber = mobileNumber;
     }
 
-    void displayCustomerDetails() {
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void displayCustomerDetails() {
+        System.out.println("\n===== CUSTOMER DETAILS =====");
         System.out.println("Customer ID   : " + customerId);
         System.out.println("Customer Name : " + customerName);
         System.out.println("Mobile Number : " + mobileNumber);
-        System.out.println("-----------------------");
     }
 }
 
 public class OnlineFoodDelivery {
     public static void main(String[] args) {
 
-        FoodItem f1 = new FoodItem(101, "Burger", 120, 2);
-        FoodItem f2 = new FoodItem(102, "Pizza", 300, 1);
-        FoodItem f3 = new FoodItem(103, "Pasta", 180, 2);
-        FoodItem f4 = new FoodItem(104, "Cold Drink", 50, 3);
+        Scanner sc = new Scanner(System.in);
 
-        Customer c1 = new Customer(1, "Rahul Sharma", "9876543210");
-        Customer c2 = new Customer(2, "Priya Singh", "9876501234");
+        System.out.println("===== ONLINE FOOD DELIVERY SYSTEM =====");
 
-        c1.displayCustomerDetails();
+        // Customer Input
+        System.out.print("Enter Customer ID: ");
+        int cid = sc.nextInt();
+        sc.nextLine();
 
-        f1.displayItemDetails();
-        f2.displayItemDetails();
-        f3.displayItemDetails();
-        f4.displayItemDetails();
+        System.out.print("Enter Customer Name: ");
+        String cname = sc.nextLine();
 
-        double totalBill = f1.calculateAmount() +
-                           f2.calculateAmount() +
-                           f3.calculateAmount() +
-                           f4.calculateAmount();
+        System.out.print("Enter Mobile Number: ");
+        String mobile = sc.nextLine();
 
-        System.out.println("Order Summary");
-        System.out.println("-----------------------");
-        System.out.println("Customer Name : " + c1.customerName);
-        System.out.println("Total Bill    : " + totalBill);
-        System.out.println("-----------------------");
+        Customer customer = new Customer(cid, cname, mobile);
+
+        FoodItem[] items = new FoodItem[4];
+        double totalBill = 0;
+
+        // Food Item Input
+        for (int i = 0; i < 4; i++) {
+            System.out.println("\nEnter Details for Item " + (i + 1));
+
+            System.out.print("Item ID: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("Item Name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Price: ");
+            double price = sc.nextDouble();
+
+            System.out.print("Quantity: ");
+            int qty = sc.nextInt();
+
+            items[i] = new FoodItem(id, name, price, qty);
+            totalBill += items[i].calculateAmount();
+        }
+
+        // Display Output
+        customer.displayCustomerDetails();
+
+        System.out.println("\n===== ORDER DETAILS =====");
+        for (FoodItem item : items) {
+            item.displayItemDetails();
+            System.out.println("-----------------------");
+        }
+
+        System.out.println("\n===== ORDER SUMMARY =====");
+        System.out.println("Customer Name : " + customer.getCustomerName());
+        System.out.println("Total Bill    : ₹" + totalBill);
+        System.out.println("=========================");
+
+        sc.close();
     }
 }
